@@ -10,7 +10,7 @@ const Root = () =>{
         if(user){
 
         if(user.role === "admin"){
-            navigate("/admin/dashboard");
+            navigate("/admin-dashboard");
         }else if(user.role === "customer"){
             navigate("/customer/dashboard");
         }else{
