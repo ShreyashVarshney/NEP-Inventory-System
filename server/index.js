@@ -18,7 +18,17 @@ app.use('/api/cables', cableRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/user', userRoutes);
 
-app.listen(process.env.PORT, () => {
+if (process.loadEnvFile && (!process.env.JWT_SECRET || !process.env.PORT)) {
+    try {
+        process.loadEnvFile();
+    } catch {
+        // .env file might already be loaded via CLI or not present in container
+    }
+}
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
     connectDB();
-    console.log(`Server running on http://localhost:${process.env.PORT || 3000}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });

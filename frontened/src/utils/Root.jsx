@@ -1,28 +1,29 @@
 import { useEffect } from "react";
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 
-const Root = () =>{
-    const {user} = useAuth();
+const Root = () => {
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        if(user){
+    useEffect(() => {
+        const token = localStorage.getItem("pos-token");
+        if (!user || !token || token === "null" || token === "undefined") {
+            if (user) logout();
+            navigate("/login");
+            return;
+        }
 
-        if(user.role === "admin"){
+        if (user.role === "admin" || user.role === "staff") {
             navigate("/admin-dashboard");
-        }else if(user.role === "customer"){
-            navigate("/customer/dashboard");
-        }else{
+        } else if (user.role === "customer") {
+            navigate("/admin-dashboard");
+        } else {
             navigate("/login");
         }
-    } else{
-        navigate("/login");
-    }
-}, [user,navigate]);
+    }, [user, navigate, logout]);
 
     return null;
-
-}
+};
 
 export default Root;
